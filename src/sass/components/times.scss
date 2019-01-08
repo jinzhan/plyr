@@ -14,9 +14,9 @@
         margin-right: $plyr-control-spacing;
     }
 
-    @media (max-width: $plyr-bp-sm-max) {
-        display: none;
-    }
+    //@media (max-width: $plyr-bp-sm-max) {
+    //    display: none;
+    //}
 }
 
 .plyr--video .plyr__time {

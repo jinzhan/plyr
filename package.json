@@ -1,7 +1,7 @@
 {
-    "name": "plyr",
-    "version": "3.4.7",
-    "description": "A simple, accessible and customizable HTML5, YouTube and Vimeo media player",
+    "name": "wplayer",
+    "version": "0.0.0",
+    "description": "A simple, accessible and customizable HTML5 media player",
     "homepage": "https://plyr.io",
     "author": "Sam Potts <sam@potts.es>",
     "keywords": [
@@ -20,10 +20,10 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git://github.com/sampotts/plyr.git"
+        "url": "git://github.com/jinzhan/wplayer.git"
     },
     "bugs": {
-        "url": "https://github.com/sampotts/plyr/issues"
+        "url": "https://github.com/jinzhan/wplayer/issues"
     },
     "directories": {
         "doc": "readme.md"

@@ -1441,18 +1441,21 @@ typeof navigator === "object" && (function (global, factory) {
           break;
 
         case 'fullscreen':
-          props.toggle = true;
+          // props.toggle = true;
           props.label = 'enterFullscreen';
-          props.labelPressed = 'exitFullscreen';
-          props.icon = 'enter-fullscreen';
-          props.iconPressed = 'exit-fullscreen';
+          props.icon = 'enter-fullscreen'; // props.labelPressed = 'exitFullscreen';
+          // props.iconPressed = 'exit-fullscreen';
+
           break;
 
         case 'play-large':
+          props.toggle = true;
           attributes.class += " ".concat(this.config.classNames.control, "--overlaid");
           type = 'play';
           props.label = 'play';
           props.icon = 'play';
+          props.labelPressed = 'pause';
+          props.iconPressed = 'pause';
           break;
 
         default:
@@ -2370,6 +2373,16 @@ typeof navigator === "object" && (function (global, factory) {
 
       if (this.config.controls.includes('play')) {
         container.appendChild(controls.createButton.call(this, 'play'));
+      } // Volume controls
+
+
+      if (this.config.controls.includes('mute')) {
+        container.appendChild(controls.createButton.call(this, 'mute'));
+      } // Media current time display
+
+
+      if (this.config.controls.includes('current-time')) {
+        container.appendChild(controls.createTime.call(this, 'currentTime'));
       } // Fast forward button
 
 
@@ -2398,45 +2411,48 @@ typeof navigator === "object" && (function (global, factory) {
 
         this.elements.progress = progress;
         container.appendChild(this.elements.progress);
-      } // Media current time display
-
-
-      if (this.config.controls.includes('current-time')) {
-        container.appendChild(controls.createTime.call(this, 'currentTime'));
       } // Media duration display
 
 
       if (this.config.controls.includes('duration')) {
         container.appendChild(controls.createTime.call(this, 'duration'));
       } // Volume controls
-
-
-      if (this.config.controls.includes('mute') || this.config.controls.includes('volume')) {
-        var volume = createElement('div', {
-          class: 'plyr__volume'
-        }); // Toggle mute button
-
-        if (this.config.controls.includes('mute')) {
-          volume.appendChild(controls.createButton.call(this, 'mute'));
-        } // Volume range control
-
-
-        if (this.config.controls.includes('volume')) {
-          // Set the attributes
-          var attributes = {
-            max: 1,
-            step: 0.05,
-            value: this.config.volume
-          }; // Create the volume range slider
-
-          volume.appendChild(controls.createRange.call(this, 'volume', extend(attributes, {
-            id: "plyr-volume-".concat(data.id)
-          })));
-          this.elements.volume = volume;
-        }
-
-        container.appendChild(volume);
-      } // Toggle captions button
+      // if (this.config.controls.includes('mute') || this.config.controls.includes('volume')) {
+      //     const volume = createElement('div', {
+      //         class: 'plyr__volume',
+      //     });
+      //
+      //     // Toggle mute button
+      //     if (this.config.controls.includes('mute')) {
+      //         volume.appendChild(controls.createButton.call(this, 'mute'));
+      //     }
+      //
+      //     // Volume range control
+      //     if (this.config.controls.includes('volume')) {
+      //         // Set the attributes
+      //         const attributes = {
+      //             max: 1,
+      //             step: 0.05,
+      //             value: this.config.volume,
+      //         };
+      //
+      //         // Create the volume range slider
+      //         volume.appendChild(
+      //             controls.createRange.call(
+      //                 this,
+      //                 'volume',
+      //                 extend(attributes, {
+      //                     id: `plyr-volume-${data.id}`,
+      //                 }),
+      //             ),
+      //         );
+      //
+      //         this.elements.volume = volume;
+      //     }
+      //
+      //     container.appendChild(volume);
+      // }
+      // Toggle captions button
 
 
       if (this.config.controls.includes('captions')) {
@@ -2559,7 +2575,7 @@ typeof navigator === "object" && (function (global, factory) {
 
 
       if (this.config.controls.includes('download')) {
-        var _attributes = {
+        var attributes = {
           element: 'a',
           href: this.download,
           target: '_blank'
@@ -2567,13 +2583,13 @@ typeof navigator === "object" && (function (global, factory) {
         var download = this.config.urls.download;
 
         if (!is.url(download) && this.isEmbed) {
-          extend(_attributes, {
+          extend(attributes, {
             icon: "logo-".concat(this.provider),
             label: this.provider
           });
         }
 
-        container.appendChild(controls.createButton.call(this, 'download', _attributes));
+        container.appendChild(controls.createButton.call(this, 'download', attributes));
       } // Toggle fullscreen button
 
 
@@ -2622,7 +2638,7 @@ typeof navigator === "object" && (function (global, factory) {
       var update = true; // If function, run it and use output
 
       if (is.function(this.config.controls)) {
-        this.config.controls = this.config.controls.call(this.props);
+        this.config.controls = this.config.controls.call(this, props);
       } // Convert falsy controls to empty array (primarily for empty strings)
 
 
@@ -2719,19 +2735,17 @@ typeof navigator === "object" && (function (global, factory) {
       if (window.navigator.userAgent.includes('Edge')) {
         repaint(target);
       } // Setup tooltips
+      // if (this.config.tooltips.controls) {
+      //     const { classNames, selectors } = this.config;
+      //     const selector = `${selectors.controls.wrapper} ${selectors.labels} .${classNames.hidden}`;
+      //     const labels = getElements.call(this, selector);
+      //
+      //     Array.from(labels).forEach(label => {
+      //         toggleClass(label, this.config.classNames.hidden, false);
+      //         toggleClass(label, this.config.classNames.tooltip, true);
+      //     });
+      // }
 
-
-      if (this.config.tooltips.controls) {
-        var _this$config = this.config,
-            classNames = _this$config.classNames,
-            selectors = _this$config.selectors;
-        var selector = "".concat(selectors.controls.wrapper, " ").concat(selectors.labels, " .").concat(classNames.hidden);
-        var labels = getElements.call(this, selector);
-        Array.from(labels).forEach(function (label) {
-          toggleClass(label, _this10.config.classNames.hidden, false);
-          toggleClass(label, _this10.config.classNames.tooltip, true);
-        });
-      }
     }
   };
 
@@ -4307,11 +4321,11 @@ typeof navigator === "object" && (function (global, factory) {
           return controls.durationUpdate.call(player, event);
         }); // Check for audio tracks on load
         // We can't use `loadedmetadata` as it doesn't seem to have audio tracks at that point
-
-        on.call(player, player.media, 'canplay loadeddata', function () {
-          toggleHidden(elements.volume, !player.hasAudio);
-          toggleHidden(elements.buttons.mute, !player.hasAudio);
-        }); // Handle the media finishing
+        // on.call(player, player.media, 'canplay loadeddata', () => {
+        //     toggleHidden(elements.volume, !player.hasAudio);
+        //     toggleHidden(elements.buttons.mute, !player.hasAudio);
+        // });
+        // Handle the media finishing
 
         on.call(player, player.media, 'ended', function () {
           // Show poster on end
@@ -4845,8 +4859,8 @@ typeof navigator === "object" && (function (global, factory) {
           if (!e.sheet.cssText.length) result = 'e';
         } catch (x) {
           // sheets objects created from load errors don't allow access to
-          // `cssText`
-          result = 'e';
+          // `cssText` (unless error is Code:18 SecurityError)
+          if (x.code != 18) result = 'e';
         }
       }
 

@@ -218,18 +218,21 @@ const controls = {
                 break;
 
             case 'fullscreen':
-                props.toggle = true;
+                // props.toggle = true;
                 props.label = 'enterFullscreen';
-                props.labelPressed = 'exitFullscreen';
                 props.icon = 'enter-fullscreen';
-                props.iconPressed = 'exit-fullscreen';
+                // props.labelPressed = 'exitFullscreen';
+                // props.iconPressed = 'exit-fullscreen';
                 break;
 
             case 'play-large':
+                props.toggle = true;
                 attributes.class += ` ${this.config.classNames.control}--overlaid`;
                 type = 'play';
                 props.label = 'play';
                 props.icon = 'play';
+                props.labelPressed = 'pause';
+                props.iconPressed = 'pause';
                 break;
 
             default:
@@ -1261,6 +1264,16 @@ const controls = {
             container.appendChild(controls.createButton.call(this, 'play'));
         }
 
+        // Volume controls
+        if (this.config.controls.includes('mute')) {
+            container.appendChild(controls.createButton.call(this, 'mute'));
+        }
+
+        // Media current time display
+        if (this.config.controls.includes('current-time')) {
+            container.appendChild(controls.createTime.call(this, 'currentTime'));
+        }
+
         // Fast forward button
         if (this.config.controls.includes('fast-forward')) {
             container.appendChild(controls.createButton.call(this, 'fast-forward'));
@@ -1300,52 +1313,47 @@ const controls = {
             container.appendChild(this.elements.progress);
         }
 
-        // Media current time display
-        if (this.config.controls.includes('current-time')) {
-            container.appendChild(controls.createTime.call(this, 'currentTime'));
-        }
-
         // Media duration display
         if (this.config.controls.includes('duration')) {
             container.appendChild(controls.createTime.call(this, 'duration'));
         }
 
         // Volume controls
-        if (this.config.controls.includes('mute') || this.config.controls.includes('volume')) {
-            const volume = createElement('div', {
-                class: 'plyr__volume',
-            });
-
-            // Toggle mute button
-            if (this.config.controls.includes('mute')) {
-                volume.appendChild(controls.createButton.call(this, 'mute'));
-            }
-
-            // Volume range control
-            if (this.config.controls.includes('volume')) {
-                // Set the attributes
-                const attributes = {
-                    max: 1,
-                    step: 0.05,
-                    value: this.config.volume,
-                };
-
-                // Create the volume range slider
-                volume.appendChild(
-                    controls.createRange.call(
-                        this,
-                        'volume',
-                        extend(attributes, {
-                            id: `plyr-volume-${data.id}`,
-                        }),
-                    ),
-                );
-
-                this.elements.volume = volume;
-            }
-
-            container.appendChild(volume);
-        }
+        // if (this.config.controls.includes('mute') || this.config.controls.includes('volume')) {
+        //     const volume = createElement('div', {
+        //         class: 'plyr__volume',
+        //     });
+        //
+        //     // Toggle mute button
+        //     if (this.config.controls.includes('mute')) {
+        //         volume.appendChild(controls.createButton.call(this, 'mute'));
+        //     }
+        //
+        //     // Volume range control
+        //     if (this.config.controls.includes('volume')) {
+        //         // Set the attributes
+        //         const attributes = {
+        //             max: 1,
+        //             step: 0.05,
+        //             value: this.config.volume,
+        //         };
+        //
+        //         // Create the volume range slider
+        //         volume.appendChild(
+        //             controls.createRange.call(
+        //                 this,
+        //                 'volume',
+        //                 extend(attributes, {
+        //                     id: `plyr-volume-${data.id}`,
+        //                 }),
+        //             ),
+        //         );
+        //
+        //         this.elements.volume = volume;
+        //     }
+        //
+        //     container.appendChild(volume);
+        // }
 
         // Toggle captions button
         if (this.config.controls.includes('captions')) {
@@ -1687,16 +1695,16 @@ const controls = {
         }
 
         // Setup tooltips
-        if (this.config.tooltips.controls) {
-            const { classNames, selectors } = this.config;
-            const selector = `${selectors.controls.wrapper} ${selectors.labels} .${classNames.hidden}`;
-            const labels = getElements.call(this, selector);
-
-            Array.from(labels).forEach(label => {
-                toggleClass(label, this.config.classNames.hidden, false);
-                toggleClass(label, this.config.classNames.tooltip, true);
-            });
-        }
+        // if (this.config.tooltips.controls) {
+        //     const { classNames, selectors } = this.config;
+        //     const selector = `${selectors.controls.wrapper} ${selectors.labels} .${classNames.hidden}`;
+        //     const labels = getElements.call(this, selector);
+        //
+        //     Array.from(labels).forEach(label => {
+        //         toggleClass(label, this.config.classNames.hidden, false);
+        //         toggleClass(label, this.config.classNames.tooltip, true);
+        //     });
+        // }
     },
 };
 

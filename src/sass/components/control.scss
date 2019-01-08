@@ -93,8 +93,11 @@ a.plyr__control {
 
     // Offset icon to make the play button look right
     svg {
-        left: 2px;
         position: relative;
+    }
+
+    .icon--not-pressed {
+        left: 2px;
     }
 
     &:hover,
@@ -103,9 +106,15 @@ a.plyr__control {
     }
 }
 
-.plyr--playing .plyr__control--overlaid {
+//.plyr--playing .plyr__control--overlaid {
+//    opacity: 0;
+//    visibility: hidden;
+//}
+
+// Hide video control
+.plyr--video.plyr--hide-controls .plyr__control {
     opacity: 0;
-    visibility: hidden;
+    pointer-events: none;
 }
 
 .plyr--full-ui.plyr--video .plyr__control--overlaid {
