@@ -1569,12 +1569,12 @@ const controls = {
     // Insert controls
     inject() {
         // Sprite
-        if (this.config.loadSprite) {
+        if (this.config.loadSprite || this.config.inlineSvg) {
             const icon = controls.getIconUrl.call(this);
 
             // Only load external sprite using AJAX
             if (icon.cors) {
-                loadSprite(icon.url, 'sprite-plyr');
+                loadSprite(icon.url, 'sprite-plyr', {inlineSvg: this.config.inlineSvg});
             }
         }
 

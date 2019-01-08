@@ -1173,6 +1173,8 @@ typeof navigator === "object" && (function (global, factory) {
   // ==========================================================================
 
   function loadSprite(url, id) {
+    var option = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
     if (!is.string(url)) {
       return;
     }
@@ -1205,6 +1207,22 @@ typeof navigator === "object" && (function (global, factory) {
 
       if (hasId) {
         container.setAttribute('id', id);
+      }
+
+      if (option.inlineSvg) {
+        var toSvg = function toSvg(str) {
+          var prefix = 'data:image/svg+xml,';
+
+          if (str.indexOf(prefix) === -1) {
+            return str;
+          }
+
+          var svg = decodeURIComponent(str).split(prefix)[1];
+          return svg.substring(0, svg.length - 1);
+        };
+
+        update(container, toSvg(option.inlineSvg));
+        return;
       } // Check in cache
 
 
@@ -2620,7 +2638,9 @@ typeof navigator === "object" && (function (global, factory) {
         var icon = controls.getIconUrl.call(this); // Only load external sprite using AJAX
 
         if (icon.cors) {
-          loadSprite(icon.url, 'sprite-plyr');
+          loadSprite(icon.url, 'sprite-plyr', {
+            inlineSvg: this.config.inlineSvg
+          });
         }
       } // Create a unique ID
 

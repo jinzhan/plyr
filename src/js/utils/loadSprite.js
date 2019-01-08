@@ -7,7 +7,7 @@ import fetch from './fetch';
 import is from './is';
 
 // Load an external SVG sprite
-export default function loadSprite(url, id) {
+export default function loadSprite(url, id, option = {}) {
     if (!is.string(url)) {
         return;
     }
@@ -42,6 +42,19 @@ export default function loadSprite(url, id) {
             container.setAttribute('id', id);
         }
 
+        if (option.inlineSvg) {
+            const toSvg = str => {
+                const prefix = 'data:image/svg+xml,';
+                if(str.indexOf(prefix) === -1) {
+                    return str;
+                }
+                const svg = decodeURIComponent(str).split(prefix)[1];
+                return svg.substring(0, svg.length -1);
+            };
+            update(container, toSvg(option.inlineSvg));
+            return;
+        }
+
         // Check in cache
         if (useStorage) {
             const cached = window.localStorage.getItem(`${prefix}-${id}`);
@@ -71,6 +84,7 @@ export default function loadSprite(url, id) {
 
                 update(container, result);
             })
-            .catch(() => {});
+            .catch(() => {
+            });
     }
 }
