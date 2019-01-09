@@ -2634,7 +2634,7 @@ typeof navigator === "object" && (function (global, factory) {
       var _this10 = this;
 
       // Sprite
-      if (this.config.loadSprite) {
+      if (this.config.loadSprite || this.config.inlineSvg) {
         var icon = controls.getIconUrl.call(this); // Only load external sprite using AJAX
 
         if (icon.cors) {
