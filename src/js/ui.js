@@ -229,6 +229,9 @@ const ui = {
     checkLoading(event) {
         this.loading = ['stalled', 'waiting'].includes(event.type);
 
+        // clear class
+        toggleClass(this.elements.container, this.config.classNames.videoInitFlag, false);
+
         // Clear timer
         clearTimeout(this.timers.loading);
 

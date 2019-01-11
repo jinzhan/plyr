@@ -6445,6 +6445,7 @@ typeof navigator === "object" && (function (global, factory) {
       type: 'plyr--{0}',
       provider: 'plyr--{0}',
       video: 'plyr__video-wrapper',
+      videoInitFlag: 'plyr__is-video-init',
       embed: 'plyr__video-embed',
       embedContainer: 'plyr__video-embed__container',
       poster: 'plyr__poster',
@@ -7053,7 +7054,9 @@ typeof navigator === "object" && (function (global, factory) {
     checkLoading: function checkLoading(event) {
       var _this4 = this;
 
-      this.loading = ['stalled', 'waiting'].includes(event.type); // Clear timer
+      this.loading = ['stalled', 'waiting'].includes(event.type); // clear class
+
+      toggleClass(this.elements.container, this.config.classNames.videoInitFlag, false); // Clear timer
 
       clearTimeout(this.timers.loading); // Timer to prevent flicker when seeking
 
@@ -9904,7 +9907,9 @@ typeof navigator === "object" && (function (global, factory) {
       this.media.plyr = this; // Wrap media
 
       if (!is$1.element(this.elements.container)) {
-        this.elements.container = createElement('div');
+        this.elements.container = createElement('div', {
+          class: this.config.classNames.videoInitFlag
+        });
         wrap(this.media, this.elements.container);
       } // Add style hook
 

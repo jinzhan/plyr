@@ -20,3 +20,7 @@
     // Require z-index to force border-radius
     z-index: 0;
 }
+
+.plyr__is-video-init .plyr__controls {
+    display: none;
+}

@@ -262,7 +262,9 @@ class Plyr {
 
         // Wrap media
         if (!is.element(this.elements.container)) {
-            this.elements.container = createElement('div');
+            this.elements.container = createElement('div', {
+                class: this.config.classNames.videoInitFlag,
+            });
             wrap(this.media, this.elements.container);
         }
 

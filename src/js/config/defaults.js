@@ -329,6 +329,7 @@ const defaults = {
         type: 'plyr--{0}',
         provider: 'plyr--{0}',
         video: 'plyr__video-wrapper',
+        videoInitFlag: 'plyr__is-video-init',
         embed: 'plyr__video-embed',
         embedContainer: 'plyr__video-embed__container',
         poster: 'plyr__poster',
