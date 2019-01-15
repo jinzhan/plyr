@@ -574,7 +574,7 @@ typeof navigator === "object" && (function (global, factory) {
   });
 
   var _core = createCommonjsModule(function (module) {
-  var core = module.exports = { version: '2.6.1' };
+  var core = module.exports = { version: '2.6.2' };
   if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
   });
   var _core_1 = _core.version;
@@ -778,7 +778,7 @@ typeof navigator === "object" && (function (global, factory) {
   })('versions', []).push({
     version: _core.version,
     mode: 'global',
-    copyright: '© 2018 Denis Pushkarev (zloirock.ru)'
+    copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
   });
   });
 
@@ -2558,12 +2558,12 @@ typeof navigator === "object" && (function (global, factory) {
             break;
           default: // \d\d?
             var n = +ch;
-            if (n === 0) return ch;
+            if (n === 0) return match;
             if (n > m) {
               var f = floor$1(n / 10);
-              if (f === 0) return ch;
+              if (f === 0) return match;
               if (f <= m) return captures[f - 1] === undefined ? ch.charAt(1) : captures[f - 1] + ch.charAt(1);
-              return ch;
+              return match;
             }
             capture = captures[n - 1];
         }
@@ -7547,7 +7547,7 @@ typeof navigator === "object" && (function (global, factory) {
         var player = this.player;
         var elements = player.elements; // IE doesn't support input event, so we fallback to change
 
-        var inputEvent = browser.isIE ? 'change' : 'input'; // Play/pause toggle
+        var inputEvent = browser.isIE || browser.isIos ? 'change' : 'input'; // Play/pause toggle
 
         if (elements.buttons.play) {
           Array.from(elements.buttons.play).forEach(function (button) {

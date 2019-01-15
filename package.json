@@ -1,6 +1,6 @@
 {
     "name": "wplayer",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "A simple, accessible and customizable HTML5 media player",
     "homepage": "https://plyr.io",
     "author": "Sam Potts <sam@potts.es>",

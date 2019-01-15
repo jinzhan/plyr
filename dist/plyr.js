@@ -4510,7 +4510,7 @@ typeof navigator === "object" && (function (global, factory) {
         var player = this.player;
         var elements = player.elements; // IE doesn't support input event, so we fallback to change
 
-        var inputEvent = browser.isIE ? 'change' : 'input'; // Play/pause toggle
+        var inputEvent = browser.isIE || browser.isIos ? 'change' : 'input'; // Play/pause toggle
 
         if (elements.buttons.play) {
           Array.from(elements.buttons.play).forEach(function (button) {

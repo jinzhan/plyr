@@ -492,7 +492,7 @@ class Listeners {
         const { elements } = player;
 
         // IE doesn't support input event, so we fallback to change
-        const inputEvent = browser.isIE ? 'change' : 'input';
+        const inputEvent = browser.isIE || browser.isIos ? 'change' : 'input';
 
         // Play/pause toggle
         if (elements.buttons.play) {
