@@ -4,6 +4,13 @@
 
 import is from './is';
 
+// Add polyfill for array
+if (!Array.prototype.find) {
+    Array.prototype.find = function(args) {
+        return this.filter(args)[0]; 
+    };
+}
+
 // Remove duplicates in an array
 export function dedupe(array) {
     if (!is.array(array)) {
