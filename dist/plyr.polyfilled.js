@@ -110,7 +110,7 @@ typeof navigator === "object" && (function (global, factory) {
     };
 
     var deserializeParam = function(value) {
-      return decodeURIComponent(value).replace(/\+/g, ' ');
+      return decodeURIComponent(String(value).replace(/\+/g, ' '));
     };
 
     var polyfillURLSearchParams = function() {
@@ -232,11 +232,11 @@ typeof navigator === "object" && (function (global, factory) {
       global.URLSearchParams = URLSearchParams;
     };
 
-    if (!('URLSearchParams' in global) || (new URLSearchParams('?a=1').toString() !== 'a=1')) {
+    if (!('URLSearchParams' in global) || (new global.URLSearchParams('?a=1').toString() !== 'a=1')) {
       polyfillURLSearchParams();
     }
 
-    var proto = URLSearchParams.prototype;
+    var proto = global.URLSearchParams.prototype;
 
     if (typeof proto.sort !== 'function') {
       proto.sort = function() {
@@ -315,7 +315,7 @@ typeof navigator === "object" && (function (global, factory) {
 
     var checkIfURLIsSupported = function() {
       try {
-        var u = new URL('b', 'http://a');
+        var u = new global.URL('b', 'http://a');
         u.pathname = 'c%20d';
         return (u.href === 'http://a/c%20d') && u.searchParams;
       } catch (e) {
@@ -361,7 +361,7 @@ typeof navigator === "object" && (function (global, factory) {
 
 
         // create a linked searchParams which reflect its changes on URL
-        var searchParams = new URLSearchParams(this.search);
+        var searchParams = new global.URLSearchParams(this.search);
         var enableSearchUpdate = true;
         var enableSearchParamsUpdate = true;
         var _this = this;
@@ -574,7 +574,7 @@ typeof navigator === "object" && (function (global, factory) {
   });
 
   var _core = createCommonjsModule(function (module) {
-  var core = module.exports = { version: '2.6.2' };
+  var core = module.exports = { version: '2.6.5' };
   if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
   });
   var _core_1 = _core.version;
@@ -670,14 +670,31 @@ typeof navigator === "object" && (function (global, factory) {
     return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
   };
 
+  var _library = false;
+
+  var _shared = createCommonjsModule(function (module) {
+  var SHARED = '__core-js_shared__';
+  var store = _global[SHARED] || (_global[SHARED] = {});
+
+  (module.exports = function (key, value) {
+    return store[key] || (store[key] = value !== undefined ? value : {});
+  })('versions', []).push({
+    version: _core.version,
+    mode: 'global',
+    copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
+  });
+  });
+
+  var _functionToString = _shared('native-function-to-string', Function.toString);
+
   var _redefine = createCommonjsModule(function (module) {
   var SRC = _uid('src');
+
   var TO_STRING = 'toString';
-  var $toString = Function[TO_STRING];
-  var TPL = ('' + $toString).split(TO_STRING);
+  var TPL = ('' + _functionToString).split(TO_STRING);
 
   _core.inspectSource = function (it) {
-    return $toString.call(it);
+    return _functionToString.call(it);
   };
 
   (module.exports = function (O, key, val, safe) {
@@ -697,7 +714,7 @@ typeof navigator === "object" && (function (global, factory) {
     }
   // add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
   })(Function.prototype, TO_STRING, function toString() {
-    return typeof this == 'function' && this[SRC] || $toString.call(this);
+    return typeof this == 'function' && this[SRC] || _functionToString.call(this);
   });
   });
 
@@ -766,21 +783,6 @@ typeof navigator === "object" && (function (global, factory) {
   };
 
   var _iterators = {};
-
-  var _library = false;
-
-  var _shared = createCommonjsModule(function (module) {
-  var SHARED = '__core-js_shared__';
-  var store = _global[SHARED] || (_global[SHARED] = {});
-
-  (module.exports = function (key, value) {
-    return store[key] || (store[key] = value !== undefined ? value : {});
-  })('versions', []).push({
-    version: _core.version,
-    mode: 'global',
-    copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
-  });
-  });
 
   var _wks = createCommonjsModule(function (module) {
   var store = _shared('wks');
@@ -2124,6 +2126,7 @@ typeof navigator === "object" && (function (global, factory) {
   };
 
   var es6_weakMap = createCommonjsModule(function (module) {
+
   var each = _arrayMethods(0);
 
 
@@ -2131,12 +2134,12 @@ typeof navigator === "object" && (function (global, factory) {
 
 
 
-
+  var NATIVE_WEAK_MAP = _validateCollection;
+  var IS_IE11 = !_global.ActiveXObject && 'ActiveXObject' in _global;
   var WEAK_MAP = 'WeakMap';
   var getWeak = _meta.getWeak;
   var isExtensible = Object.isExtensible;
   var uncaughtFrozenStore = _collectionWeak.ufstore;
-  var tmp = {};
   var InternalMap;
 
   var wrapper = function (get) {
@@ -2164,7 +2167,7 @@ typeof navigator === "object" && (function (global, factory) {
   var $WeakMap = module.exports = _collection(WEAK_MAP, wrapper, methods, _collectionWeak, true, true);
 
   // IE11 WeakMap frozen keys fix
-  if (_fails(function () { return new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7; })) {
+  if (NATIVE_WEAK_MAP && IS_IE11) {
     InternalMap = _collectionWeak.getConstructor(wrapper, WEAK_MAP);
     _objectAssign(InternalMap.prototype, methods);
     _meta.NEED = true;
@@ -2307,9 +2310,10 @@ typeof navigator === "object" && (function (global, factory) {
   var $SPLIT = 'split';
   var LENGTH = 'length';
   var LAST_INDEX$1 = 'lastIndex';
+  var MAX_UINT32 = 0xffffffff;
 
-  // eslint-disable-next-line no-empty
-  var SUPPORTS_Y = !!(function () { try { return new RegExp('x', 'y'); } catch (e) {} })();
+  // babel-minify transpiles RegExp('x', 'y') -> /x/y and it causes SyntaxError
+  var SUPPORTS_Y = !_fails(function () { });
 
   // @@split logic
   _fixReWks('split', 2, function (defined, SPLIT, $split, maybeCallNative) {
@@ -2334,7 +2338,7 @@ typeof navigator === "object" && (function (global, factory) {
                     (separator.unicode ? 'u' : '') +
                     (separator.sticky ? 'y' : '');
         var lastLastIndex = 0;
-        var splitLimit = limit === undefined ? 4294967295 : limit >>> 0;
+        var splitLimit = limit === undefined ? MAX_UINT32 : limit >>> 0;
         // Make `global` and avoid `lastIndex` issues by working with a copy
         var separatorCopy = new RegExp(separator.source, flags + 'g');
         var match, lastIndex, lastLength;
@@ -2388,14 +2392,14 @@ typeof navigator === "object" && (function (global, factory) {
 
         var unicodeMatching = rx.unicode;
         var flags = (rx.ignoreCase ? 'i' : '') +
-                      (rx.multiline ? 'm' : '') +
-                      (rx.unicode ? 'u' : '') +
-                      (SUPPORTS_Y ? 'y' : 'g');
+                    (rx.multiline ? 'm' : '') +
+                    (rx.unicode ? 'u' : '') +
+                    (SUPPORTS_Y ? 'y' : 'g');
 
         // ^(? + rx + ) is needed, in combination with some S slicing, to
         // simulate the 'y' flag.
         var splitter = new C(SUPPORTS_Y ? rx : '^(?:' + rx.source + ')', flags);
-        var lim = limit === undefined ? 0xffffffff : limit >>> 0;
+        var lim = limit === undefined ? MAX_UINT32 : limit >>> 0;
         if (lim === 0) return [];
         if (S.length === 0) return _regexpExecAbstract(splitter, S) === null ? [S] : [];
         var p = 0;
@@ -3864,7 +3868,12 @@ typeof navigator === "object" && (function (global, factory) {
     }
   };
 
-  // ==========================================================================
+  if (!Array.prototype.find) {
+    Array.prototype.find = function (args) {
+      return this.filter(args)[0];
+    };
+  } // Remove duplicates in an array
+
 
   function dedupe(array) {
     if (!is$1.array(array)) {
@@ -7931,18 +7940,26 @@ typeof navigator === "object" && (function (global, factory) {
         maxTries = (args.numRetries || 0) + 1,
         beforeCallbackFn = args.before || devnull,
         pathStripped = path.replace(/^(css|img)!/, ''),
-        isCss,
+        isLegacyIECss,
         e;
 
     numTries = numTries || 0;
 
     if (/(^css!|\.css$)/.test(path)) {
-      isCss = true;
-
       // css
       e = doc.createElement('link');
       e.rel = 'stylesheet';
-      e.href = pathStripped; //.replace(/^css!/, '');  // remove "css!" prefix
+      e.href = pathStripped;
+
+      // tag IE9+
+      isLegacyIECss = 'hideFocus' in e;
+
+      // use preload in IE Edge (to detect load errors)
+      if (isLegacyIECss && e.relList) {
+        isLegacyIECss = 0;
+        e.rel = 'preload';
+        e.as = 'style';
+      }
     } else if (/(^img!|\.(png|gif|jpg|svg)$)/.test(path)) {
       // image
       e = doc.createElement('img');
@@ -7957,9 +7974,9 @@ typeof navigator === "object" && (function (global, factory) {
     e.onload = e.onerror = e.onbeforeload = function (ev) {
       var result = ev.type[0];
 
-      // Note: The following code isolates IE using `hideFocus` and treats empty
-      // stylesheets as failures to get around lack of onerror support
-      if (isCss && 'hideFocus' in e) {
+      // treat empty stylesheets as failures to get around lack of onerror
+      // support in IE9-11
+      if (isLegacyIECss) {
         try {
           if (!e.sheet.cssText.length) result = 'e';
         } catch (x) {
@@ -7978,8 +7995,11 @@ typeof navigator === "object" && (function (global, factory) {
         if (numTries < maxTries) {
           return loadFile(path, callbackFn, args, numTries);
         }
+      } else if (e.rel == 'preload' && e.as == 'style') {
+        // activate preloaded stylesheets
+        return e.rel = 'stylesheet'; // jshint ignore:line
       }
-
+      
       // execute callback
       callbackFn(path, result, ev.defaultPrevented);
     };
@@ -8051,14 +8071,23 @@ typeof navigator === "object" && (function (global, factory) {
       }
     }
 
-    // load scripts
-    loadFiles(paths, function (pathsNotFound) {
-      // execute callbacks
-      executeCallbacks(args, pathsNotFound);
+    function loadFn(resolve, reject) {
+      loadFiles(paths, function (pathsNotFound) {
+        // execute callbacks
+        executeCallbacks(args, pathsNotFound);
+        
+        // resolve Promise
+        if (resolve) {
+          executeCallbacks({success: resolve, error: reject}, pathsNotFound);
+        }
 
-      // publish bundle load event
-      publish(bundleId, pathsNotFound);
-    }, args);
+        // publish bundle load event
+        publish(bundleId, pathsNotFound);
+      }, args);
+    }
+    
+    if (args.returnPromise) return new Promise(loadFn);
+    else loadFn();
   }
 
 
