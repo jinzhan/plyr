@@ -5,6 +5,7 @@
 // License: The MIT License (MIT)
 // ==========================================================================
 
+import { closest } from './utils/arrays';
 import captions from './captions';
 import defaults from './config/defaults';
 import { pip } from './config/states';
@@ -19,7 +20,6 @@ import source from './source';
 import Storage from './storage';
 import support from './support';
 import ui from './ui';
-import { closest } from './utils/arrays';
 import { createElement, hasClass, removeElement, replaceElement, toggleClass, wrap } from './utils/elements';
 import { off, on, once, triggerEvent, unbindListeners } from './utils/events';
 import is from './utils/is';

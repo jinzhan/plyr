@@ -220,6 +220,35 @@ typeof navigator === "object" && (function (global, factory) {
   };
 
   // ==========================================================================
+
+  if (!Array.prototype.find) {
+    Array.prototype.find = function (args) {
+      return this.filter(args)[0];
+    };
+  } // Remove duplicates in an array
+
+
+  function dedupe(array) {
+    if (!is.array(array)) {
+      return array;
+    }
+
+    return array.filter(function (item, index) {
+      return array.indexOf(item) === index;
+    });
+  } // Get the closest value in an array
+
+  function closest(array, value) {
+    if (!is.array(array) || !array.length) {
+      return null;
+    }
+
+    return array.reduce(function (prev, curr) {
+      return Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev;
+    });
+  }
+
+  // ==========================================================================
   // https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
   // https://www.youtube.com/watch?v=NPM6172J22g
 
@@ -874,35 +903,6 @@ typeof navigator === "object" && (function (global, factory) {
       this.debug.log('Cancelled network requests');
     }
   };
-
-  // ==========================================================================
-
-  if (!Array.prototype.find) {
-    Array.prototype.find = function (args) {
-      return this.filter(args)[0];
-    };
-  } // Remove duplicates in an array
-
-
-  function dedupe(array) {
-    if (!is.array(array)) {
-      return array;
-    }
-
-    return array.filter(function (item, index) {
-      return array.indexOf(item) === index;
-    });
-  } // Get the closest value in an array
-
-  function closest(array, value) {
-    if (!is.array(array) || !array.length) {
-      return null;
-    }
-
-    return array.reduce(function (prev, curr) {
-      return Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev;
-    });
-  }
 
   function cloneDeep(object) {
     return JSON.parse(JSON.stringify(object));

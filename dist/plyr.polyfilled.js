@@ -2282,6 +2282,177 @@ typeof navigator === "object" && (function (global, factory) {
     throw new TypeError("Invalid attempt to destructure non-iterable instance");
   }
 
+  var STARTS_WITH = 'startsWith';
+  var $startsWith = ''[STARTS_WITH];
+
+  _export(_export.P + _export.F * _failsIsRegexp(STARTS_WITH), 'String', {
+    startsWith: function startsWith(searchString /* , position = 0 */) {
+      var that = _stringContext(this, searchString, STARTS_WITH);
+      var index = _toLength(Math.min(arguments.length > 1 ? arguments[1] : undefined, that.length));
+      var search = String(searchString);
+      return $startsWith
+        ? $startsWith.call(that, search, index)
+        : that.slice(index, index + search.length) === search;
+    }
+  });
+
+  // 20.1.2.4 Number.isNaN(number)
+
+
+  _export(_export.S, 'Number', {
+    isNaN: function isNaN(number) {
+      // eslint-disable-next-line no-self-compare
+      return number != number;
+    }
+  });
+
+  // ==========================================================================
+  // Type checking utils
+  // ==========================================================================
+  var getConstructor = function getConstructor(input) {
+    return input !== null && typeof input !== 'undefined' ? input.constructor : null;
+  };
+
+  var instanceOf = function instanceOf(input, constructor) {
+    return Boolean(input && constructor && input instanceof constructor);
+  };
+
+  var isNullOrUndefined = function isNullOrUndefined(input) {
+    return input === null || typeof input === 'undefined';
+  };
+
+  var isObject = function isObject(input) {
+    return getConstructor(input) === Object;
+  };
+
+  var isNumber = function isNumber(input) {
+    return getConstructor(input) === Number && !Number.isNaN(input);
+  };
+
+  var isString = function isString(input) {
+    return getConstructor(input) === String;
+  };
+
+  var isBoolean = function isBoolean(input) {
+    return getConstructor(input) === Boolean;
+  };
+
+  var isFunction = function isFunction(input) {
+    return getConstructor(input) === Function;
+  };
+
+  var isArray = function isArray(input) {
+    return Array.isArray(input);
+  };
+
+  var isWeakMap = function isWeakMap(input) {
+    return instanceOf(input, WeakMap);
+  };
+
+  var isNodeList = function isNodeList(input) {
+    return instanceOf(input, NodeList);
+  };
+
+  var isElement = function isElement(input) {
+    return instanceOf(input, Element);
+  };
+
+  var isTextNode = function isTextNode(input) {
+    return getConstructor(input) === Text;
+  };
+
+  var isEvent = function isEvent(input) {
+    return instanceOf(input, Event);
+  };
+
+  var isKeyboardEvent = function isKeyboardEvent(input) {
+    return instanceOf(input, KeyboardEvent);
+  };
+
+  var isCue = function isCue(input) {
+    return instanceOf(input, window.TextTrackCue) || instanceOf(input, window.VTTCue);
+  };
+
+  var isTrack = function isTrack(input) {
+    return instanceOf(input, TextTrack) || !isNullOrUndefined(input) && isString(input.kind);
+  };
+
+  var isEmpty = function isEmpty(input) {
+    return isNullOrUndefined(input) || (isString(input) || isArray(input) || isNodeList(input)) && !input.length || isObject(input) && !Object.keys(input).length;
+  };
+
+  var isUrl = function isUrl(input) {
+    // Accept a URL object
+    if (instanceOf(input, window.URL)) {
+      return true;
+    } // Must be string from here
+
+
+    if (!isString(input)) {
+      return false;
+    } // Add the protocol if required
+
+
+    var string = input;
+
+    if (!input.startsWith('http://') || !input.startsWith('https://')) {
+      string = "http://".concat(input);
+    }
+
+    try {
+      return !isEmpty(new URL(string).hostname);
+    } catch (e) {
+      return false;
+    }
+  };
+
+  var is$1 = {
+    nullOrUndefined: isNullOrUndefined,
+    object: isObject,
+    number: isNumber,
+    string: isString,
+    boolean: isBoolean,
+    function: isFunction,
+    array: isArray,
+    weakMap: isWeakMap,
+    nodeList: isNodeList,
+    element: isElement,
+    textNode: isTextNode,
+    event: isEvent,
+    keyboardEvent: isKeyboardEvent,
+    cue: isCue,
+    track: isTrack,
+    url: isUrl,
+    empty: isEmpty
+  };
+
+  if (!Array.prototype.find) {
+    Array.prototype.find = function (args) {
+      return this.filter(args)[0];
+    };
+  } // Remove duplicates in an array
+
+
+  function dedupe(array) {
+    if (!is$1.array(array)) {
+      return array;
+    }
+
+    return array.filter(function (item, index) {
+      return array.indexOf(item) === index;
+    });
+  } // Get the closest value in an array
+
+  function closest(array, value) {
+    if (!is$1.array(array) || !array.length) {
+      return null;
+    }
+
+    return array.reduce(function (prev, curr) {
+      return Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev;
+    });
+  }
+
   // 19.1.3.1 Object.assign(target, source)
 
 
@@ -3071,150 +3242,6 @@ typeof navigator === "object" && (function (global, factory) {
     }
   });
 
-  var STARTS_WITH = 'startsWith';
-  var $startsWith = ''[STARTS_WITH];
-
-  _export(_export.P + _export.F * _failsIsRegexp(STARTS_WITH), 'String', {
-    startsWith: function startsWith(searchString /* , position = 0 */) {
-      var that = _stringContext(this, searchString, STARTS_WITH);
-      var index = _toLength(Math.min(arguments.length > 1 ? arguments[1] : undefined, that.length));
-      var search = String(searchString);
-      return $startsWith
-        ? $startsWith.call(that, search, index)
-        : that.slice(index, index + search.length) === search;
-    }
-  });
-
-  // 20.1.2.4 Number.isNaN(number)
-
-
-  _export(_export.S, 'Number', {
-    isNaN: function isNaN(number) {
-      // eslint-disable-next-line no-self-compare
-      return number != number;
-    }
-  });
-
-  // ==========================================================================
-  // Type checking utils
-  // ==========================================================================
-  var getConstructor = function getConstructor(input) {
-    return input !== null && typeof input !== 'undefined' ? input.constructor : null;
-  };
-
-  var instanceOf = function instanceOf(input, constructor) {
-    return Boolean(input && constructor && input instanceof constructor);
-  };
-
-  var isNullOrUndefined = function isNullOrUndefined(input) {
-    return input === null || typeof input === 'undefined';
-  };
-
-  var isObject = function isObject(input) {
-    return getConstructor(input) === Object;
-  };
-
-  var isNumber = function isNumber(input) {
-    return getConstructor(input) === Number && !Number.isNaN(input);
-  };
-
-  var isString = function isString(input) {
-    return getConstructor(input) === String;
-  };
-
-  var isBoolean = function isBoolean(input) {
-    return getConstructor(input) === Boolean;
-  };
-
-  var isFunction = function isFunction(input) {
-    return getConstructor(input) === Function;
-  };
-
-  var isArray = function isArray(input) {
-    return Array.isArray(input);
-  };
-
-  var isWeakMap = function isWeakMap(input) {
-    return instanceOf(input, WeakMap);
-  };
-
-  var isNodeList = function isNodeList(input) {
-    return instanceOf(input, NodeList);
-  };
-
-  var isElement = function isElement(input) {
-    return instanceOf(input, Element);
-  };
-
-  var isTextNode = function isTextNode(input) {
-    return getConstructor(input) === Text;
-  };
-
-  var isEvent = function isEvent(input) {
-    return instanceOf(input, Event);
-  };
-
-  var isKeyboardEvent = function isKeyboardEvent(input) {
-    return instanceOf(input, KeyboardEvent);
-  };
-
-  var isCue = function isCue(input) {
-    return instanceOf(input, window.TextTrackCue) || instanceOf(input, window.VTTCue);
-  };
-
-  var isTrack = function isTrack(input) {
-    return instanceOf(input, TextTrack) || !isNullOrUndefined(input) && isString(input.kind);
-  };
-
-  var isEmpty = function isEmpty(input) {
-    return isNullOrUndefined(input) || (isString(input) || isArray(input) || isNodeList(input)) && !input.length || isObject(input) && !Object.keys(input).length;
-  };
-
-  var isUrl = function isUrl(input) {
-    // Accept a URL object
-    if (instanceOf(input, window.URL)) {
-      return true;
-    } // Must be string from here
-
-
-    if (!isString(input)) {
-      return false;
-    } // Add the protocol if required
-
-
-    var string = input;
-
-    if (!input.startsWith('http://') || !input.startsWith('https://')) {
-      string = "http://".concat(input);
-    }
-
-    try {
-      return !isEmpty(new URL(string).hostname);
-    } catch (e) {
-      return false;
-    }
-  };
-
-  var is$1 = {
-    nullOrUndefined: isNullOrUndefined,
-    object: isObject,
-    number: isNumber,
-    string: isString,
-    boolean: isBoolean,
-    function: isFunction,
-    array: isArray,
-    weakMap: isWeakMap,
-    nodeList: isNodeList,
-    element: isElement,
-    textNode: isTextNode,
-    event: isEvent,
-    keyboardEvent: isKeyboardEvent,
-    cue: isCue,
-    track: isTrack,
-    url: isUrl,
-    empty: isEmpty
-  };
-
   // https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
   // https://www.youtube.com/watch?v=NPM6172J22g
 
@@ -3867,33 +3894,6 @@ typeof navigator === "object" && (function (global, factory) {
       this.debug.log('Cancelled network requests');
     }
   };
-
-  if (!Array.prototype.find) {
-    Array.prototype.find = function (args) {
-      return this.filter(args)[0];
-    };
-  } // Remove duplicates in an array
-
-
-  function dedupe(array) {
-    if (!is$1.array(array)) {
-      return array;
-    }
-
-    return array.filter(function (item, index) {
-      return array.indexOf(item) === index;
-    });
-  } // Get the closest value in an array
-
-  function closest(array, value) {
-    if (!is$1.array(array) || !array.length) {
-      return null;
-    }
-
-    return array.reduce(function (prev, curr) {
-      return Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev;
-    });
-  }
 
   function cloneDeep(object) {
     return JSON.parse(JSON.stringify(object));
