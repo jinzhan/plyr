@@ -15,7 +15,6 @@ import controls from './controls';
 import Fullscreen from './fullscreen';
 import Listeners from './listeners';
 import media from './media';
-import Ads from './plugins/ads';
 import source from './source';
 import Storage from './storage';
 import support from './support';
@@ -146,7 +145,7 @@ class Plyr {
         this.elements.original = clone;
 
         // Set media type based on tag or data attribute
-        // Supported: video, audio, vimeo, youtube
+        // Supported: video, audio
         const type = this.media.tagName.toLowerCase();
 
         // Embed properties
@@ -296,11 +295,6 @@ class Plyr {
         // Setup fullscreen
         this.fullscreen = new Fullscreen(this);
 
-        // Setup ads if provided
-        if (this.config.ads.enabled) {
-            this.ads = new Ads(this);
-        }
-
         // Autoplay if required
         if (this.config.autoplay) {
             this.play();
@@ -325,13 +319,6 @@ class Plyr {
         return Boolean(this.isYouTube || this.isVimeo);
     }
 
-    get isYouTube() {
-        return Boolean(this.provider === providers.youtube);
-    }
-
-    get isVimeo() {
-        return Boolean(this.provider === providers.vimeo);
-    }
 
     get isVideo() {
         return Boolean(this.type === types.video);
@@ -1124,7 +1111,7 @@ class Plyr {
     /**
      * Check for support
      * @param {string} type - Player type (audio/video)
-     * @param {string} provider - Provider (html5/youtube/vimeo)
+     * @param {string} provider - Provider (html5)
      * @param {bool} inline - Where player has `playsinline` sttribute
      */
     static supported(type, provider, inline) {

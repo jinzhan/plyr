@@ -187,19 +187,6 @@ const defaults = {
     // URLs
     urls: {
         download: null,
-        vimeo: {
-            sdk: 'https://player.vimeo.com/api/player.js',
-            iframe: 'https://player.vimeo.com/video/{0}?{1}',
-            api: 'https://vimeo.com/api/v2/video/{0}.json',
-        },
-        youtube: {
-            sdk: 'https://www.youtube.com/iframe_api',
-            api:
-                'https://www.googleapis.com/youtube/v3/videos?id={0}&key={1}&fields=items(snippet(title))&part=snippet',
-        },
-        googleIMA: {
-            sdk: 'https://imasdk.googleapis.com/js/sdkloader/ima3.js',
-        },
     },
 
     // Custom control listeners
@@ -264,17 +251,6 @@ const defaults = {
 
         // Quality
         'qualitychange',
-
-        // Ads
-        'adsloaded',
-        'adscontentpause',
-        'adscontentresume',
-        'adstarted',
-        'adsmidpoint',
-        'adscomplete',
-        'adsallcomplete',
-        'adsimpression',
-        'adsclick',
     ],
 
     // Selectors
@@ -334,7 +310,6 @@ const defaults = {
         embedContainer: 'plyr__video-embed__container',
         poster: 'plyr__poster',
         posterEnabled: 'plyr__poster-enabled',
-        ads: 'plyr__ads',
         control: 'plyr__control',
         controlPressed: 'plyr__control--pressed',
         playing: 'plyr--playing',
@@ -388,13 +363,6 @@ const defaults = {
     // API keys
     keys: {
         google: null,
-    },
-
-    // Advertisements plugin
-    // Register for an account here: http://vi.ai/publisher-video-monetization/?aid=plyrio
-    ads: {
-        enabled: false,
-        publisherId: '',
     },
 };
 
