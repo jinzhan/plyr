@@ -246,9 +246,6 @@ const defaults = {
         'controlsshown',
         'ready',
 
-        // YouTube
-        'statechange',
-
         // Quality
         'qualitychange',
     ],
@@ -358,11 +355,6 @@ const defaults = {
             provider: 'data-plyr-provider',
             id: 'data-plyr-embed-id',
         },
-    },
-
-    // API keys
-    keys: {
-        google: null,
     },
 };
 
