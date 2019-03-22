@@ -27,6 +27,7 @@ const defaults = {
 
     // Default volume
     volume: 1,
+
     muted: false,
 
     // Pass a custom duration

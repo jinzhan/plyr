@@ -11,8 +11,6 @@ const resources = {
     pip: 'PIP',
     airplay: 'AirPlay',
     html5: 'HTML5',
-    vimeo: 'Vimeo',
-    youtube: 'YouTube',
 };
 
 const i18n = {

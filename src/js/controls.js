@@ -3,7 +3,6 @@
 // TODO: This needs to be split into smaller files and cleaned up
 // ==========================================================================
 
-import captions from './captions';
 import html5 from './html5';
 import support from './support';
 import { repaint, transitionEndEvent } from './utils/animation';
@@ -47,7 +46,6 @@ const controls = {
                 pip: getElement.call(this, this.config.selectors.buttons.pip),
                 airplay: getElement.call(this, this.config.selectors.buttons.airplay),
                 settings: getElement.call(this, this.config.selectors.buttons.settings),
-                captions: getElement.call(this, this.config.selectors.buttons.captions),
                 fullscreen: getElement.call(this, this.config.selectors.buttons.fullscreen),
             };
 
@@ -207,14 +205,6 @@ const controls = {
                 props.labelPressed = 'unmute';
                 props.icon = 'volume';
                 props.iconPressed = 'muted';
-                break;
-
-            case 'captions':
-                props.toggle = true;
-                props.label = 'enableCaptions';
-                props.labelPressed = 'disableCaptions';
-                props.icon = 'captions-off';
-                props.iconPressed = 'captions-on';
                 break;
 
             case 'fullscreen':
@@ -865,9 +855,6 @@ const controls = {
 
                 return toTitleCase(value);
 
-            case 'captions':
-                return captions.getLabel.call(this);
-
             default:
                 return null;
         }
@@ -979,58 +966,6 @@ const controls = {
 
     // Get current selected caption language
     // TODO: rework this to user the getter in the API?
-
-    // Set a list of available captions languages
-    setCaptionsMenu() {
-        // Menu required
-        if (!is.element(this.elements.settings.panels.captions)) {
-            return;
-        }
-
-        // TODO: Captions or language? Currently it's mixed
-        const type = 'captions';
-        const list = this.elements.settings.panels.captions.querySelector('[role="menu"]');
-        const tracks = captions.getTracks.call(this);
-        const toggle = Boolean(tracks.length);
-
-        // Toggle the pane and tab
-        controls.toggleMenuButton.call(this, type, toggle);
-
-        // Empty the menu
-        emptyElement(list);
-
-        // Check if we need to toggle the parent
-        controls.checkMenu.call(this);
-
-        // If there's no captions, bail
-        if (!toggle) {
-            return;
-        }
-
-        // Generate options data
-        const options = tracks.map((track, value) => ({
-            value,
-            checked: this.captions.toggled && this.currentTrack === value,
-            title: captions.getLabel.call(this, track),
-            badge: track.language && controls.createBadge.call(this, track.language.toUpperCase()),
-            list,
-            type: 'language',
-        }));
-
-        // Add the "Disabled" option to turn off captions
-        options.unshift({
-            value: -1,
-            checked: !this.captions.toggled,
-            title: i18n.get('disabled', this.config),
-            list,
-            type: 'language',
-        });
-
-        // Generate options
-        options.forEach(controls.createMenuItem.bind(this));
-
-        controls.updateSetting.call(this, type, list);
-    },
 
     // Set a list of available captions languages
     setSpeedMenu(options) {
@@ -1355,11 +1290,6 @@ const controls = {
         //     container.appendChild(volume);
         // }
 
-        // Toggle captions button
-        if (this.config.controls.includes('captions')) {
-            container.appendChild(controls.createButton.call(this, 'captions'));
-        }
-
         // Settings button / menu
         if (this.config.controls.includes('settings') && !is.empty(this.config.settings)) {
             const control = createElement('div', {
@@ -1613,7 +1543,6 @@ const controls = {
                 seektime: this.config.seekTime,
                 speed: this.speed,
                 quality: this.quality,
-                captions: captions.getLabel.call(this),
                 // TODO: Looping
                 // loop: 'None',
             });

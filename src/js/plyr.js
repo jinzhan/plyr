@@ -6,7 +6,6 @@
 // ==========================================================================
 
 import { closest } from './utils/arrays';
-import captions from './captions';
 import defaults from './config/defaults';
 import { pip } from './config/states';
 import { getProviderByUrl, providers, types } from './config/types';
@@ -75,7 +74,6 @@ class Plyr {
         // Elements cache
         this.elements = {
             container: null,
-            captions: null,
             buttons: {},
             display: {},
             progress: {},
@@ -86,13 +84,6 @@ class Plyr {
                 panels: {},
                 buttons: {},
             },
-        };
-
-        // Captions
-        this.captions = {
-            active: null,
-            currentTrack: -1,
-            meta: new WeakMap(),
         };
 
         // Fullscreen
@@ -841,46 +832,6 @@ class Plyr {
     }
 
     /**
-     * Toggle captions
-     * @param {boolean} input - Whether to enable captions
-     */
-    toggleCaptions(input) {
-        captions.toggle.call(this, input, false);
-    }
-
-    /**
-     * Set the caption track by index
-     * @param {number} - Caption index
-     */
-    set currentTrack(input) {
-        captions.set.call(this, input, false);
-    }
-
-    /**
-     * Get the current caption track index (-1 if disabled)
-     */
-    get currentTrack() {
-        const { toggled, currentTrack } = this.captions;
-        return toggled ? currentTrack : -1;
-    }
-
-    /**
-     * Set the wanted language for captions
-     * Since tracks can be added later it won't update the actual caption track until there is a matching track
-     * @param {string} - Two character ISO language code (e.g. EN, FR, PT, etc)
-     */
-    set language(input) {
-        captions.setLanguage.call(this, input, false);
-    }
-
-    /**
-     * Get the current track's language
-     */
-    get language() {
-        return (captions.getCurrentTrack.call(this) || {}).language;
-    }
-
-    /**
      * Toggle picture-in-picture playback on WebKit/MacOS
      * TODO: update player with state, support, enabled
      * TODO: detect outside changes
@@ -1022,13 +973,11 @@ class Plyr {
                 if (Object.keys(this.elements).length) {
                     // Remove elements
                     removeElement(this.elements.buttons.play);
-                    removeElement(this.elements.captions);
                     removeElement(this.elements.controls);
                     removeElement(this.elements.wrapper);
 
                     // Clear for GC
                     this.elements.buttons.play = null;
-                    this.elements.captions = null;
                     this.elements.controls = null;
                     this.elements.wrapper = null;
                 }
