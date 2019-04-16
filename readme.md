@@ -65,6 +65,24 @@ If you're using the `<base>` tag on your site, you may need to use something lik
 More info on SVG sprites here: [http://css-tricks.com/svg-sprites-use-better-icon-fonts/](http://css-tricks.com/svg-sprites-use-better-icon-fonts/) and the AJAX
 technique here: [http://css-tricks.com/ajaxing-svg-sprite/](http://css-tricks.com/ajaxing-svg-sprite/)
 
+
+#### Using the `inlineSvg` option
+
+You can specify `inlineSvg` option like this: 
+
+```
+    const inlineSvg = require('wplayer/dist/plyr.svg');
+    
+    const player = new Player(someSelector, {
+        controls: [
+           ...
+        ],
+        loadSprite: true,
+        inlineSvg
+    });
+
+```
+
 ### Cross Origin (CORS)
 
 You'll notice the `crossorigin` attribute on the example `<video>` elements. This is because the TextTrack captions are loaded from another domain. If your
