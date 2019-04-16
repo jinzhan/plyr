@@ -26,7 +26,7 @@
 
 ### HTML
 
-Plyr extends upon the standard [HTML5 media element](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) markup so that's all you need for those types.
+Player extends upon the standard [HTML5 media element](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) markup so that's all you need for those types.
 
 #### HTML5 Video
 
@@ -52,12 +52,12 @@ Plyr extends upon the standard [HTML5 media element](https://developer.mozilla.o
 
 ### SVG
 
-The icons used in the Plyr controls are loaded in an SVG sprite. The sprite is automatically loaded from our CDN by default. If you already have an icon build
+The icons used in the Player controls are loaded in an SVG sprite. The sprite is automatically loaded from our CDN by default. If you already have an icon build
 system in place, you can include the source plyr icons (see `/src/sprite` for source icons).
 
 #### Using the `iconUrl` option
 
-You can however specify your own `iconUrl` option and Plyr will determine if the url is absolute and requires loading by AJAX/CORS due to current browser
+You can however specify your own `iconUrl` option and Player will determine if the url is absolute and requires loading by AJAX/CORS due to current browser
 limitations or if it's a relative path, just use the path directly.
 
 If you're using the `<base>` tag on your site, you may need to use something like this: [svgfixer.js](https://gist.github.com/leonderijke/c5cf7c5b2e424c0061d2)
@@ -95,19 +95,19 @@ Here's some examples
 Passing a [string selector](https://developer.mozilla.org/en-US/docs/Web/API/NodeList):
 
 ```javascript
-const player = new Plyr('#player');
+const player = new Player('#player');
 ```
 
 Passing a [HTMLElement](https://developer.mozilla.org/en/docs/Web/API/HTMLElement):
 
 ```javascript
-const player = new Plyr(document.getElementById('player'));
+const player = new Player(document.getElementById('player'));
 ```
 
 Passing a [NodeList](https://developer.mozilla.org/en-US/docs/Web/API/NodeList) (see note below):
 
 ```javascript
-const player = new Plyr(document.querySelectorAll('.js-player'));
+const player = new Player(document.querySelectorAll('.js-player'));
 ```
 
 The NodeList, HTMLElement or string selector can be the target `<video>`, `<audio>`, or `<div>` wrapper for embeds.
@@ -117,13 +117,13 @@ The NodeList, HTMLElement or string selector can be the target `<video>`, `<audi
 You have two choices here. You can either use a simple array loop to map the constructor:
 
 ```javascript
-const players = Array.from(document.querySelectorAll('.js-player')).map(p => new Plyr(p));
+const players = Array.from(document.querySelectorAll('.js-player')).map(p => new Player(p));
 ```
 
 ...or use a static method where you can pass a [string selector](https://developer.mozilla.org/en-US/docs/Web/API/NodeList), a [NodeList](https://developer.mozilla.org/en-US/docs/Web/API/NodeList) or an [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array) of elements:
 
 ```javascript
-const players = Plyr.setup('.js-player');
+const players = Player.setup('.js-player');
 ```
 
 Both options will also return an array of instances in the order of they were in the DOM for the string selector or the source NodeList or Array.
@@ -133,12 +133,12 @@ Both options will also return an array of instances in the order of they were in
 The second argument for the constructor is the [options](#options) object:
 
 ```javascript
-const player = new Plyr('#player', {
+const player = new Player('#player', {
     /* options */
 });
 ```
 
-In all cases, the constructor will return a Plyr object that can be used with the [API](#api) methods. See the [API](#api) section for more info.
+In all cases, the constructor will return a Player object that can be used with the [API](#api) methods. See the [API](#api) section for more info.
 
 #### Options
 
@@ -152,7 +152,7 @@ Note the single quotes encapsulating the JSON and double quotes on the object ke
 
 | Option               | Type                       | Default                                                                                                                        | Description                                                                                                                                                                                                                                                                                                                                                            |
 | -------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `enabled`            | Boolean                    | `true`                                                                                                                         | Completely disable Plyr. This would allow you to do a User Agent check or similar to programmatically enable or disable Plyr for a certain UA. Example below.                                                                                                                                                                                                          |
+| `enabled`            | Boolean                    | `true`                                                                                                                         | Completely disable Player. This would allow you to do a User Agent check or similar to programmatically enable or disable Player for a certain UA. Example below.                                                                                                                                                                                                          |
 | `debug`              | Boolean                    | `false`                                                                                                                        | Display debugging information in the console                                                                                                                                                                                                                                                                                                                           |
 | `controls`           | Array, Function or Element | `['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen']` | If a function is passed, it is assumed your method will return either an element or HTML string for the controls. Three arguments will be passed to your function; `id` (the unique id for the player), `seektime` (the seektime step in seconds), and `title` (the media title). See [controls.md](controls.md) for more info on how the html needs to be structured. |
 | `settings`           | Array                      | `['captions', 'quality', 'speed', 'loop']`                                                                                     | If you're using the default controls are used then you can specify which settings to show in the menu                                                                                                                                                                                                                                                                  |
@@ -191,14 +191,14 @@ Note the single quotes encapsulating the JSON and double quotes on the object ke
 
 ## API
 
-There are methods, setters and getters on a Plyr object.
+There are methods, setters and getters on a Player object.
 
 ### Object
 
-The easiest way to access the Plyr object is to set the return value from your call to the constructor to a variable. For example:
+The easiest way to access the Player object is to set the return value from your call to the constructor to a variable. For example:
 
 ```javascript
-const player = new Plyr('#player', {
+const player = new Player('#player', {
     /* options */
 });
 ```
@@ -367,7 +367,7 @@ _Note:_ `src` property for YouTube and Vimeo can either be the video ID or the w
 
 ## Events
 
-You can listen for events on the target element you setup Plyr on (see example under the table). Some events only apply to HTML5 audio and video. Using your
+You can listen for events on the target element you setup Player on (see example under the table). Some events only apply to HTML5 audio and video. Using your
 reference to the instance, you can use the `on()` API method or `addEventListener()`. Access to the API can be obtained this way through the `event.detail.plyr`
 property. Here's an example:
 
@@ -438,11 +438,11 @@ document then the shortcuts will work when any element has focus, apart from an 
 
 ## Fullscreen
 
-Fullscreen in Plyr is supported by all browsers that [currently support it](http://caniuse.com/#feat=fullscreen).
+Fullscreen in Player is supported by all browsers that [currently support it](http://caniuse.com/#feat=fullscreen).
 
 ## Browser support
 
-Plyr supports the last 2 versions of most _modern_ browsers.
+Player supports the last 2 versions of most _modern_ browsers.
 
 | Browser       | Supported     |
 | ------------- | ------------- |
@@ -461,14 +461,14 @@ Plyr supports the last 2 versions of most _modern_ browsers.
 
 ### Polyfills
 
-Plyr uses ES6 which isn't supported in all browsers quite yet. This means some features will need to be polyfilled to be available otherwise you'll run into issues. We've elected to not burden the ~90% of users that do support these features with extra JS and instead leave polyfilling to you to work out based on your needs. The easiest method I've found is to use [polyfill.io](https://polyfill.io) which provides polyfills based on user agent. This is the method the demo uses.
+Player uses ES6 which isn't supported in all browsers quite yet. This means some features will need to be polyfilled to be available otherwise you'll run into issues. We've elected to not burden the ~90% of users that do support these features with extra JS and instead leave polyfilling to you to work out based on your needs. The easiest method I've found is to use [polyfill.io](https://polyfill.io) which provides polyfills based on user agent. This is the method the demo uses.
 
 ### Checking for support
 
 You can use the static method to check for support. For example
 
 ```javascript
-const supported = Plyr.supported('video', 'html5', true);
+const supported = Player.supported('video', 'html5', true);
 ```
 
 The arguments are:
@@ -479,7 +479,7 @@ The arguments are:
 
 ### Disable support programatically
 
-The `enabled` option can be used to disable certain User Agents. For example, if you don't want to use Plyr for smartphones, you could use:
+The `enabled` option can be used to disable certain User Agents. For example, if you don't want to use Player for smartphones, you could use:
 
 ```javascript
 {
@@ -497,7 +497,7 @@ solution. It's a tiny script with a nice benefit for users on touch devices.
 
 ## Issues
 
-If you find anything weird with Plyr, please let us know using the GitHub issues tracker.
+If you find anything weird with Player, please let us know using the GitHub issues tracker.
 
 
 ## Copyright and License
