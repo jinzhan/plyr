@@ -1,10 +1,5 @@
-# Plyr
+# wplayer
 
-A simple, lightweight, accessible and customizable HTML5, YouTube and Vimeo media player that supports [_modern_](#browser-support) browsers.
-
-[Checkout the demo](https://plyr.io) - [Donate to support Plyr](#donate) - [Chat on Slack](https://bit.ly/plyr-chat)
-
-[![Image of Plyr](https://cdn.plyr.io/static/demo/screenshot.png?v=3)](https://plyr.io)
 
 ## Features
 
@@ -14,7 +9,6 @@ A simple, lightweight, accessible and customizable HTML5, YouTube and Vimeo medi
     `<span>` or `<a href="#">` button hacks
 -   **Responsive** - works with any screen size
 -   **HTML Video & Audio** - support for both formats
--   **[Embedded Video](#embeds)** - support for YouTube and Vimeo video playback
 -   **[Monetization](#ads)** - make money from your videos
 -   **[Streaming](#try-plyr-online)** - support for hls.js, Shaka and dash.js streaming playback
 -   **[API](#api)** - toggle playback, volume, seeking, and more through a standardized API
@@ -29,31 +23,6 @@ A simple, lightweight, accessible and customizable HTML5, YouTube and Vimeo medi
 -   **No dependencies** - written in "vanilla" ES6 JavaScript, no jQuery required
 -   **SASS** - to include in your build processes
 
-Oh and yes, it works with Bootstrap.
-
-## Changelog
-
-Check out the [changelog](changelog.md) to see what's new with Plyr.
-
-## Plugins & Components
-
-Some awesome folks have made plugins for CMSs and Components for JavaScript frameworks:
-
-| Type      | Maintainer                                                     | Link                                                                                         |
-| --------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| WordPress | Brandon Lavigne ([@drrobotnik](https://github.com/drrobotnik)) | [https://wordpress.org/plugins/plyr/](https://wordpress.org/plugins/plyr/)                   |
-| React     | Jose Miguel Bejarano ([@xDae](https://github.com/xDae))        | [https://github.com/xDae/react-plyr](https://github.com/xDae/react-plyr)                     |
-| Vue       | Gabe Dunn ([@redxtech](https://github.com/redxtech))           | [https://github.com/redxtech/vue-plyr](https://github.com/redxtech/vue-plyr)                 |
-| Neos      | Jon Uhlmann ([@jonnitto](https://github.com/jonnitto))         | [https://packagist.org/packages/jonnitto/plyr](https://packagist.org/packages/jonnitto/plyr) |
-| Kirby     | Dominik Pschenitschni ([@dpschen](https://github.com/dpschen)) | [https://github.com/dpschen/kirby-plyrtag](https://github.com/dpschen/kirby-plyrtag)         |
-
-## Quick setup
-
-Here's a quick run through on getting up and running. There's also a [demo on Codepen](http://codepen.io/sampotts/pen/jARJYp). You can grab all of the source with [NPM](https://www.npmjs.com/package/plyr) using `npm install plyr`.
-
-### Try Plyr online
-
-You can try Plyr in Codepen using our minimal templates: [HTML5 video](https://codepen.io/pen?template=bKeqpr), [HTML5 audio](https://codepen.io/pen?template=rKLywR), [YouTube](https://codepen.io/pen?template=GGqbbJ), [Vimeo](https://codepen.io/pen?template=bKeXNq). For Streaming we also have example integrations with: [Dash.js](https://codepen.io/pen?template=zaBgBy), [Hls.js](https://codepen.io/pen?template=oyLKQb) and [Shaka Player](https://codepen.io/pen?template=ZRpzZO)
 
 ### HTML
 
@@ -80,105 +49,6 @@ Plyr extends upon the standard [HTML5 media element](https://developer.mozilla.o
 </audio>
 ```
 
-For YouTube and Vimeo players, Plyr uses progressive enhancement to enhance the default `<iframe>` embeds. Below are some examples. The `plyr__video-embed` classname will make the embed responsive. You can add the `autoplay`, `loop`, `hl` (YouTube only) and `playsinline` (YouTube only) query parameters to the URL and they will be set as config options automatically. For YouTube, the `origin` should be updated to reflect the domain you're hosting the embed on, or you can opt to omit it.
-
-#### YouTube embed
-
-We recommend [progressive enhancement](https://www.smashingmagazine.com/2009/04/progressive-enhancement-what-it-is-and-how-to-use-it/) with the embedded players. You can elect to use an `<iframe>` as the source element (which Plyr will progressively enhance) or a bog standard `<div>` with two essential data attributes - `data-plyr-provider` and `data-plyr-embed-id`.
-
-```html
-<div class="plyr__video-embed" id="player">
-    <iframe src="https://www.youtube.com/embed/bTqVqk7FSmY?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1" allowfullscreen allowtransparency allow="autoplay"></iframe>
-</div>
-```
-
-_Note_: The `plyr__video-embed` classname will make the player a responsive 16:9 (most common) iframe embed. When plyr itself kicks in, your custom `ratio` config option will be used.
-
-Or the `<div>` non progressively enhanced method:
-
-```html
-<div id="player" data-plyr-provider="youtube" data-plyr-embed-id="bTqVqk7FSmY"></div>
-```
-
-_Note_: The `data-plyr-embed-id` can either be the video ID or URL for the media.
-
-#### Vimeo embed
-
-Much the same as YouTube above.
-
-```html
-<div class="plyr__video-embed" id="player">
-    <iframe src="https://player.vimeo.com/video/76979871?loop=false&amp;byline=false&amp;portrait=false&amp;title=false&amp;speed=true&amp;transparent=0&amp;gesture=media" allowfullscreen allowtransparency allow="autoplay"></iframe>
-</div>
-```
-
-Or the `<div>` non progressively enhanced method:
-
-```html
-<div id="player" data-plyr-provider="vimeo" data-plyr-embed-id="76979871"></div>
-```
-
-### JavaScript
-
-Include the `plyr.js` script before the closing `</body>` tag and then in your JS create a new instance of Plyr as below.
-
-```html
-<script src="path/to/plyr.js"></script>
-<script>const player = new Plyr('#player');</script>
-```
-
-See [initialising](#initialising) for more information on advanced setups.
-
-You can use our CDN (provided by [Fastly](https://www.fastly.com/)) for the JavaScript. There's 2 versions; one with and one without [polyfills](#polyfills). My recommendation would be to manage polyfills seperately as part of your application but to make life easier you can use the polyfilled build.
-
-```html
-<script src="https://cdn.plyr.io/3.4.7/plyr.js"></script>
-```
-
-...or...
-
-```html
-<script src="https://cdn.plyr.io/3.4.7/plyr.polyfilled.js"></script>
-```
-
-### CSS
-
-Include the `plyr.css` stylsheet into your `<head>`
-
-```html
-<link rel="stylesheet" href="path/to/plyr.css">
-```
-
-If you want to use our CDN (provided by [Fastly](https://www.fastly.com/)) for the default CSS, you can use the following:
-
-```html
-<link rel="stylesheet" href="https://cdn.plyr.io/3.4.7/plyr.css">
-```
-
-### SVG Sprite
-
-The SVG sprite is loaded automatically from our CDN (provided by [Fastly](https://www.fastly.com/)). To change this, see the [options](#options) below. For
-reference, the CDN hosted SVG sprite can be found at `https://cdn.plyr.io/3.4.7/plyr.svg`.
-
-## Ads
-
-Plyr has partnered up with [vi.ai](https://vi.ai/publisher-video-monetization/?aid=plyrio) to offer monetization options for your videos. Getting setup is easy:
-
--   [Sign up for a vi.ai account](https://vi.ai/publisher-video-monetization/?aid=plyrio)
--   Grab your publisher ID from the code snippet
--   Enable ads in the [config options](#options) and enter your publisher ID
-
-Any questions regarding the ads can be sent straight to vi.ai and any issues with rendering raised through GitHub issues.
-
-## Advanced
-
-### SASS
-
-You can use `bundle.scss` file included in `/src` as part of your build and change variables to suit your design. The SASS require you to
-use the [autoprefixer](https://www.npmjs.com/package/gulp-autoprefixer) plugin (you should be already!) as all declarations use the W3C definitions.
-
-The HTML markup uses the BEM methodology with `plyr` as the block, e.g. `.plyr__controls`. You can change the class hooks in the options to match any custom CSS
-you write. Check out the JavaScript source for more on this.
 
 ### SVG
 
@@ -482,35 +352,6 @@ player.source = {
 };
 ```
 
-YouTube example:
-
-```javascript
-player.source = {
-    type: 'video',
-    sources: [
-        {
-            src: 'bTqVqk7FSmY',
-            provider: 'youtube',
-        },
-    ],
-};
-```
-
-_Note_: `src` can be the video ID or URL
-
-Vimeo example
-
-```javascript
-player.source = {
-    type: 'video',
-    sources: [
-        {
-            src: '143418951',
-            provider: 'vimeo',
-        },
-    ],
-};
-```
 
 _Note:_ `src` property for YouTube and Vimeo can either be the video ID or the whole URL.
 
@@ -575,26 +416,6 @@ player.on('ready', event => {
 | `cuechange`      | Sent when a `TextTrack` has changed the currently displaying cues.                                                                                                                                                                                                                                                                             |
 | `error`          | Sent when an error occurs. The element's `error` attribute contains more information.                                                                                                                                                                                                                                                          |
 
-#### YouTube only
-
-| Event Type    | Description                                                                                                                                                                                                                                                                                                                |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `statechange` | The state of the player has changed. The code can be accessed via `event.detail.code`. Possible values are `-1`: Unstarted, `0`: Ended, `1`: Playing, `2`: Paused, `3`: Buffering, `5`: Video cued. See the [YouTube Docs](https://developers.google.com/youtube/iframe_api_reference#onStateChange) for more information. |
-
-_Note:_ These events also bubble up the DOM. The event target will be the container element.
-
-Some event details borrowed from [MDN](https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events).
-
-## Embeds
-
-YouTube and Vimeo are currently supported and function much like a HTML5 video. Similar events and API methods are available for all types. However if you wish
-to access the API's directly. You can do so via the `embed` property of your player object - e.g. `player.embed`. You can then use the relevant methods from the
-third party APIs. More info on the respective API's here:
-
--   [YouTube iframe API Reference](https://developers.google.com/youtube/iframe_api_reference)
--   [Vimeo player.js Reference](https://github.com/vimeo/player.js)
-
-_Note_: Not all API methods may work 100%. Your mileage may vary. It's better to use the Plyr API where possible.
 
 ## Shortcuts
 
@@ -678,62 +499,6 @@ solution. It's a tiny script with a nice benefit for users on touch devices.
 
 If you find anything weird with Plyr, please let us know using the GitHub issues tracker.
 
-## Author
-
-Plyr is developed by [@sam_potts](https://twitter.com/sam_potts) / [sampotts.me](http://sampotts.me) with help from the awesome
-[contributors](https://github.com/sampotts/plyr/graphs/contributors)
-
-## Donate
-
-Plyr costs money to run, not only my time. I donate my time for free as I enjoy building Plyr but unfortunately have to pay for domains, hosting, and more. Any help with costs is appreciated...
-
--   [Donate via Patreon](https://www.patreon.com/plyr)
--   [Donate via PayPal](https://www.paypal.me/pottsy/20usd)
-
-## Mentions
-
--   [ProductHunt](https://www.producthunt.com/tech/plyr)
--   [The Changelog](http://thechangelog.com/plyr-simple-html5-media-player-custom-controls-webvtt-captions/)
--   [HTML5 Weekly #177](http://html5weekly.com/issues/177)
--   [Responsive Design #149](http://us4.campaign-archive2.com/?u=559bc631fe5294fc66f5f7f89&id=451a61490f)
--   [Web Design Weekly #174](https://web-design-weekly.com/2015/02/24/web-design-weekly-174/)
--   [Hacker News](https://news.ycombinator.com/item?id=9136774)
--   [Web Platform Daily](http://webplatformdaily.org/releases/2015-03-04)
--   [LayerVault Designer News](https://news.layervault.com/stories/45394-plyr--a-simple-html5-media-player)
--   [The Treehouse Show #131](https://teamtreehouse.com/library/episode-131-origami-react-responsive-hero-images)
--   [noupe.com](http://www.noupe.com/design/html5-plyr-is-a-responsive-and-accessible-video-player-94389.html)
-
-## Used by
-
--   [Selz.com](https://selz.com)
--   [Peugeot.fr](http://www.peugeot.fr/marque-et-technologie/technologies/peugeot-i-cockpit.html)
--   [Peugeot.de](http://www.peugeot.de/modelle/modellberater/208-3-turer/fotos-videos.html)
--   [TomTom.com](http://prioritydriving.tomtom.com/)
--   [DIGBMX](http://digbmx.com/)
--   [Grime Archive](https://grimearchive.com/)
--   [koel - A personal music streaming server that works.](http://koel.phanan.net/)
--   [Oscar Radio](http://oscar-radio.xyz/)
--   [Sparkk TV](https://www.sparkktv.com/)
--   [@halfhalftravel](https://www.halfhalftravel.com/)
-
-Let me know on [Twitter](https://twitter.com/sam_potts) I can add you to the above list. It'd be awesome to see how you're using Plyr :-)
-
-## Useful links and credits
-
-Credit to the PayPal HTML5 Video player from which Plyr's caption functionality was originally ported from:
-
--   [PayPal's Accessible HTML5 Video Player](https://github.com/paypal/accessible-html5-video-player)
--   [An awesome guide for Plyr in Japanese!](http://syncer.jp/how-to-use-plyr-io) by [@arayutw](https://twitter.com/arayutw)
-
-## Thanks
-
-[![Fastly](https://cdn.plyr.io/static/fastly-logo.png)](https://www.fastly.com/)
-
-Massive thanks to [Fastly](https://www.fastly.com/) for providing the CDN services.
-
-[![Sentry](https://cdn.plyr.io/static/sentry-logo-black.svg)](https://sentry.io/)
-
-Massive thanks to [Sentry](https://sentry.io/) for providing the logging services for the demo site.
 
 ## Copyright and License
 
